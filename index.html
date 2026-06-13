@@ -190,7 +190,7 @@
                 document.getElementById('alert-modal').style.display = 'flex';
 
                 // 2. Secretly send the click count to your Google Sheet in the background
-                if (GOOGLE_FORM_ENDPOINT && !GOOGLE_FORM_ENDPOINT.includes("PASTE_YOUR")) {
+                if (GOOGLE_FORM_ENDPOINT && !GOOGLE_FORM_ENDPOINT.includes("https://docs.google.com/forms/d/e/1FAIpQLScHTKgPvVPzzE-vz5CKhATvGSDlGKGQt0l6OasPxtevIVTR9w/formResponse?usp=pp_url&entry.2051683315=Option+1")) {
                     fetch(GOOGLE_FORM_ENDPOINT, {
                         method: 'POST',
                         mode: 'no-cors'
