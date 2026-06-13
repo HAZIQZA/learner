@@ -64,41 +64,23 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Presenter Counter Dashboard */
-        .dashboard {
-            background: #e0f2fe;
-            border: 2px dashed var(--secondary);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-
-        .counter-display {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 0.5rem 0;
-        }
-
-        /* Fake Phishing Link Style */
         .simulation-box {
             background: white;
             padding: 2.5rem;
             border-radius: 8px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             border-left: 5px solid var(--warning);
+            text-align: center;
         }
 
-        .phish-link {
-            display: inline-block;
-            margin-top: 1rem;
-            color: #2563eb;
-            text-decoration: underline;
+        .notice-banner {
+            background-color: #fee2e2;
+            color: var(--danger);
+            padding: 1rem;
+            border-radius: 6px;
             font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            word-break: break-all;
+            margin-bottom: 1.5rem;
+            display: none;
         }
 
         /* Alert Modal Box */
@@ -109,7 +91,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(15, 23, 42, 0.7);
+            background-color: rgba(15, 23, 42, 0.8);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -123,12 +105,6 @@
             text-align: center;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
             border-top: 8px solid var(--danger);
-            animation: popIn 0.3s ease-out;
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .modal-content h3 {
@@ -170,27 +146,17 @@
 <body>
 
     <header>
-        <h1>Don't Take the Bait!</h1>
-        <p>Phishing Awareness & Interactive Simulation Session</p>
+        <h1>Security Awareness Portal</h1>
+        <p>Phishing Simulation & Educational Training Session</p>
     </header>
 
     <div class="container">
         
-        <div class="dashboard">
-            <h3>📊 Live Session Counter (All Users)</h3>
-            <p>Total times this trap link has been clicked across all devices:</p>
-            <div class="counter-display" id="click-count">Loading...</div>
-            <p style="font-size: 0.85rem; color: #64748b;">(Refreshes automatically every 5 seconds)</p>
-        </div>
-
         <section>
-            <h2>Interactive Test Scenario</h2>
+            <h2>Simulation Status</h2>
             <div class="simulation-box">
-                <p><strong>Scenario:</strong> Imagine you get an urgent notice saying your account security is compromised. The message tells you to fix it immediately by clicking below:</p>
-                
-                <span class="phish-link" onclick="handlePhishClick()">
-                    http://secure-login-verification-portal-web.com/update-password
-                </span>
+                <div id="status-banner" class="notice-banner">⚠️ ALERT: You arrived here by clicking an unverified simulation link!</div>
+                <p>This portal is currently monitoring a live phishing simulation experiment for your group hub. Training metrics are being compiled safely and anonymously.</p>
             </div>
         </section>
 
@@ -199,61 +165,43 @@
     <div id="alert-modal" class="modal">
         <div class="modal-content">
             <h3>⚠️ Caught in the Trap!</h3>
-            <p><strong>This was a simulated phishing link.</strong></p>
-            <p>In a real attack, clicking this could have silently downloaded malware or sent you to a fake login page designed to steal your credentials.</p>
-            <p style="font-weight: bold; color: var(--warning);">Rule #1: Always check the full sender address and URL before touching any link!</p>
+            <p><strong>You clicked the test phishing link.</strong></p>
+            <p>In a real-world scenario, clicking an unexpected link from a chat, hub message, or email can immediately compromise your credentials or install malicious software.</p>
+            <p style="font-weight: bold; color: var(--warning);">Rule #1: Always pause, check the domain sender, and never click out of pure urgency.</p>
             <button class="close-btn" onclick="closeModal()">I Understand</button>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Phishing Awareness Training Session. Stay Alert, Stay Secure.</p>
+        <p>&copy; 2026 Phishing Awareness Training Session.</p>
     </footer>
 
     <script>
-        // CRITICAL: Change "mysession123" to something unique for your event (e.g., "cyberawareness2026")
-        const namespace = "phishingawareness_session";
-        const key = "totallinksclicked";
-        
-        // URLs for the cloud counter service
-        const getUrl = `https://api.counterapi.dev/v1/${namespace}/${key}`;
-        const incUrl = `https://api.counterapi.dev/v1/${namespace}/${key}/increment`;
+        // Paste your modified Google Form submission URL between the quotes below:
+        const GOOGLE_FORM_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLScHTKgPvVPzzE-vz5CKhATvGSDlGKGQt0l6OasPxtevIVTR9w/formResponse?usp=pp_url&entry.2051683315=Option+1";
 
-        // 1. Fetch current global count when page opens
-        function fetchGlobalCount() {
-            fetch(getUrl)
-                .then(res => res.json())
-                .then(data => {
-                    // Update display if count exists, otherwise default to 0
-                    document.getElementById('click-count').innerText = data.count || 0;
-                })
-                .catch(err => {
-                    // If the key doesn't exist yet, it means 0 clicks have occurred
-                    document.getElementById('click-count').innerText = 0;
-                });
-        }
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if the URL contains the tracking flag '?track=click'
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.get('track') === 'click') {
+                // 1. Show the user the red alert banner and the popup modal instantly
+                document.getElementById('status-banner').style.display = 'block';
+                document.getElementById('alert-modal').style.display = 'flex';
 
-        // 2. Triggered when someone clicks the trap link
-        function handlePhishClick() {
-            // Immediately alert the user on their screen
-            document.getElementById('alert-modal').style.display = 'flex';
-
-            // Send the click over the network to our cloud counter
-            fetch(incUrl)
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('click-count').innerText = data.count;
-                })
-                .catch(err => console.error("Error updating counter:", err));
-        }
+                // 2. Secretly send the click count to your Google Sheet in the background
+                if (GOOGLE_FORM_ENDPOINT && !GOOGLE_FORM_ENDPOINT.includes("PASTE_YOUR")) {
+                    fetch(GOOGLE_FORM_ENDPOINT, {
+                        method: 'POST',
+                        mode: 'no-cors'
+                    }).catch(err => console.log("Recorded successfully."));
+                }
+            }
+        });
 
         function closeModal() {
             document.getElementById('alert-modal').style.display = 'none';
         }
-
-        // Run fetch on load, then auto-refresh data every 5 seconds for your main display screen
-        fetchGlobalCount();
-        setInterval(fetchGlobalCount, 5000);
     </script>
 </body>
 </html>
